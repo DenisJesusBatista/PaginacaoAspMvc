@@ -12,9 +12,15 @@ namespace PaginacaoBasica.Controllers
     {
         private LojaContext db = new LojaContext();
         // GET: Produtos
-        public ActionResult Index(int pagina = 1)
+        public ActionResult Index(string busca = "",int pagina = 1)
         {
-            var produtos = db.Produtos.OrderBy(p => p.Id).ToPagedList(pagina, 10);
+            //var produtos = db.Produtos.OrderBy(p => p.Id).ToPagedList(pagina, 10);
+            var produtos = db.Produtos.Where(p => p.Nome.Contains(busca))
+                                      .OrderBy(p => p.Id)
+                                      .ToPagedList(pagina, 10);
+
+            ViewBag.Busca = busca;
+
             return View(produtos);
         }
     }
